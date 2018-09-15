@@ -1,8 +1,8 @@
 import * as React from 'react';
 import NodeGroup from 'react-move/NodeGroup';
-import { easeExpOut } from 'd3-ease';
+import { easeBounceInOut } from 'd3-ease';
 
-const timing = { ease: easeExpOut, duration: 1000 };
+const timing = { ease: easeBounceInOut, duration: 1000 };
 
 interface IAnimationProps {
   values: number[];

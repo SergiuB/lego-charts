@@ -9,23 +9,21 @@ import Animation from 'src/components/Animation';
 class App extends React.Component {
   public render() {
     return (
-      <Animation values={[600, 1]}>
-        {({ values }) => (
-          <Surface
-            width={values[0]}
-            height={400}
-            padding={[10, 10, 20, 30]}
-            opacity={values[1]}
-          >
-            <ScaleProvider xDomain={[1, 3]} yDomain={[10, 130]}>
-              <XAxis />
-              <YAxis ticks={5} />
-              <Line color="red" points={[[1, 10], [2, 30], [3, 130]]} />
-              <Line color="blue" points={[[1, 50], [2, 20], [3, 90]]} />
-            </ScaleProvider>
-          </Surface>
-        )}
-      </Animation>
+      <Surface width={600} height={400} padding={[10, 10, 20, 30]}>
+        <ScaleProvider xDomain={[1, 3]} yDomain={[10, 130]}>
+          <XAxis />
+          <YAxis ticks={5} />
+          <Animation values={[10, 30, 130]}>
+            {({ values: yValues }) => (
+              <Line
+                color="red"
+                points={[[1, yValues[0]], [2, yValues[1]], [3, yValues[2]]]}
+              />
+            )}
+          </Animation>
+          <Line color="blue" points={[[1, 50], [2, 20], [3, 90]]} />
+        </ScaleProvider>
+      </Surface>
     );
   }
 }
