@@ -26,11 +26,12 @@ export const Surface: React.SFC<ISurfaceProps & IRenderProps> = ({
   padding,
   children: renderFn
 }) => {
-  const paddedWidth = width - (padding[1] + padding[3]);
-  const paddedHeight = height - (padding[0] + padding[2]);
+  const [pt, pr, pb, pl] = padding;
+  const paddedWidth = width - (pl + pr);
+  const paddedHeight = height - (pt + pb);
   return (
     <svg style={{ width, height }}>
-      <g transform={`translate(${padding[3]} ,${padding[0]})`}>
+      <g transform={`translate(${pl} ,${pt})`}>
         {renderFn({ width: paddedWidth, height: paddedHeight })}
       </g>
     </svg>

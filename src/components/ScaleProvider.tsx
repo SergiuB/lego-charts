@@ -28,10 +28,10 @@ const ScaleProvider: React.SFC<IScaleProviderProps & ISurfaceContext> = ({
     value={{
       xScale: scaleLinear()
         .domain(xDomain)
-        .range([0, width]),
+        .rangeRound([0, width]),
       yScale: scaleLinear()
         .domain(yDomain)
-        .range([height, 0])
+        .rangeRound([height, 0])
     }}
   >
     {children}
