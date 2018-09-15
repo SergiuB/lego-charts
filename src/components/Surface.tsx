@@ -6,7 +6,7 @@ interface IDimensions {
 }
 
 interface IRenderProps {
-  children(props: ISurfaceContext): JSX.Element;
+  children: (props: IDimensions) => JSX.Element;
 }
 
 interface ISurfaceProps extends IDimensions {
