@@ -1,15 +1,17 @@
 import * as React from 'react';
 import { curveCardinal } from 'd3-shape';
 import { line } from 'd3-shape';
-import { SeriesContext, ISeriesContext } from 'src/components/Series';
 import { ScaleContext, IScaleContext } from 'src/components/ScaleProvider';
 // import withContext from './withContext';
 
+type Point = [number, number];
+
 interface ILineProps {
+  points: Point[];
   color: string;
 }
 
-const Line: React.SFC<ILineProps & ISeriesContext & IScaleContext> = ({ color, xScale, yScale, points }) => {
+const Line: React.SFC<ILineProps & IScaleContext> = ({ color, xScale, yScale, points }) => {
   const linePath = line()
     .x(d => xScale(d[0]))
     .y(d => yScale(d[1]))
@@ -28,19 +30,10 @@ const Line: React.SFC<ILineProps & ISeriesContext & IScaleContext> = ({ color, x
   );
 }
 
-
-// const LineSeries = withContext<ISeriesContext, ILineProps>(SeriesContext, Line);
-
-// export withContext<IScaleContext, ISeriesContext & ILineProps>(ScaleContext, LineSeries);
-
 const LineWithContext: React.SFC<ILineProps> = props => (
   <ScaleContext.Consumer>
     {(scaleContext) =>
-      <SeriesContext.Consumer>
-        {(seriesContext) =>
-          <Line {...props} {...scaleContext} {...seriesContext} />
-        }
-      </SeriesContext.Consumer>
+      <Line {...props} {...scaleContext} />
     }
   </ScaleContext.Consumer>
 )
