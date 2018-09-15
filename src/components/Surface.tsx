@@ -11,6 +11,7 @@ interface IRenderProps {
 
 interface ISurfaceProps extends IDimensions {
   padding: [number, number, number, number];
+  opacity?: number;
 }
 
 export type ISurfaceContext = IDimensions;
@@ -24,13 +25,14 @@ export const Surface: React.SFC<ISurfaceProps & IRenderProps> = ({
   width,
   height,
   padding,
+  opacity = 1,
   children: renderFn
 }) => {
   const [pt, pr, pb, pl] = padding;
   const paddedWidth = width - (pl + pr);
   const paddedHeight = height - (pt + pb);
   return (
-    <svg style={{ width, height }}>
+    <svg style={{ width, height, opacity }}>
       <g transform={`translate(${pl} ,${pt})`}>
         {renderFn({ width: paddedWidth, height: paddedHeight })}
       </g>
@@ -40,7 +42,12 @@ export const Surface: React.SFC<ISurfaceProps & IRenderProps> = ({
 
 const SurfaceProvider: React.SFC<ISurfaceProps> = props => {
   return (
-    <Surface width={props.width} height={props.height} padding={props.padding}>
+    <Surface
+      width={props.width}
+      height={props.height}
+      padding={props.padding}
+      opacity={props.opacity}
+    >
       {paddedDimensions => (
         <SurfaceContext.Provider value={paddedDimensions}>
           {props.children}
