@@ -2,12 +2,9 @@ import * as React from 'react';
 import { axisBottom } from 'd3-axis';
 import { SurfaceContext, ISurfaceContext } from 'src/components/Surface';
 import Axis from './Axis';
+import { IXYScalesContext, XYScalesContext } from 'src/components/XYScales';
 
-interface IXAxisProps {
-  xScale: any;
-}
-
-const XAxis: React.SFC<ISurfaceContext & IXAxisProps> = ({
+const XAxis: React.SFC<ISurfaceContext & Pick<IXYScalesContext, 'xScale'>> = ({
   width,
   height,
   xScale
@@ -16,9 +13,15 @@ const XAxis: React.SFC<ISurfaceContext & IXAxisProps> = ({
   return <Axis height={height} axis={xAxis} axisType="x" />;
 };
 
-const XAxisWithContext: React.SFC<IXAxisProps> = props => (
+const XAxisWithContext: React.SFC<{}> = props => (
   <SurfaceContext.Consumer>
-    {surfaceContext => <XAxis {...props} {...surfaceContext} />}
+    {surfaceContext => (
+      <XYScalesContext.Consumer>
+        {xyScalesContext => (
+          <XAxis {...props} {...surfaceContext} {...xyScalesContext} />
+        )}
+      </XYScalesContext.Consumer>
+    )}
   </SurfaceContext.Consumer>
 );
 

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { curveCardinal } from 'd3-shape';
 import { line } from 'd3-shape';
+import { XYScalesContext, IXYScalesContext } from 'src/components/XYScales';
 // import withContext from './withContext';
 
 type Point = [number, number];
@@ -8,14 +9,17 @@ type Point = [number, number];
 interface ILineProps {
   points: Point[];
   color: string;
-  xScale: any;
-  yScale: any;
 }
 
-const Line: React.SFC<ILineProps> = ({ color, xScale, yScale, points }) => {
+export const Line: React.SFC<ILineProps & IXYScalesContext> = ({
+  color,
+  xScale,
+  yScale,
+  points
+}) => {
   const linePath = line()
-    .x(d => xScale(d[0]))
-    .y(d => yScale(d[1]))
+    .x(d => xScale(d[0]) || 0)
+    .y(d => yScale(d[1]) || 0)
     .curve(curveCardinal.tension(0.1));
 
   return (
@@ -31,4 +35,10 @@ const Line: React.SFC<ILineProps> = ({ color, xScale, yScale, points }) => {
   );
 };
 
-export default Line;
+const LineWithContext: React.SFC<ILineProps> = props => (
+  <XYScalesContext.Consumer>
+    {xyScalesContext => <Line {...props} {...xyScalesContext} />}
+  </XYScalesContext.Consumer>
+);
+
+export default LineWithContext;

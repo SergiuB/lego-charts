@@ -8,10 +8,9 @@ interface IYScaleProps {
   children: (scale: any) => JSX.Element;
 }
 
-const YScale: React.SFC<IYScaleProps & ISurfaceContext> = ({
-  height,
-  ...props
-}) => <Scale {...props} range={[height, 0]} />;
+export const YScale: React.SFC<
+  IYScaleProps & Pick<ISurfaceContext, 'height'>
+> = ({ height, ...props }) => <Scale {...props} range={[height, 0]} />;
 
 const YScaleWithContext: React.SFC<IYScaleProps> = props => (
   <SurfaceContext.Consumer>

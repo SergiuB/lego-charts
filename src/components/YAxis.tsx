@@ -2,12 +2,9 @@ import * as React from 'react';
 import { axisLeft } from 'd3-axis';
 import { SurfaceContext, ISurfaceContext } from 'src/components/Surface';
 import Axis from './Axis';
+import { XYScalesContext, IXYScalesContext } from 'src/components/XYScales';
 
-interface IYAxisProps {
-  yScale: any;
-}
-
-const YAxis: React.SFC<IYAxisProps & ISurfaceContext> = ({
+const YAxis: React.SFC<IXYScalesContext & ISurfaceContext> = ({
   width,
   height,
   yScale
@@ -16,9 +13,15 @@ const YAxis: React.SFC<IYAxisProps & ISurfaceContext> = ({
   return <Axis height={height} axis={yAxis} axisType="y" />;
 };
 
-const YAxisWithContext: React.SFC<IYAxisProps> = props => (
+const YAxisWithContext: React.SFC<{}> = props => (
   <SurfaceContext.Consumer>
-    {surfaceContext => <YAxis {...props} {...surfaceContext} />}
+    {surfaceContext => (
+      <XYScalesContext.Consumer>
+        {xyScalesContext => (
+          <YAxis {...props} {...surfaceContext} {...xyScalesContext} />
+        )}
+      </XYScalesContext.Consumer>
+    )}
   </SurfaceContext.Consumer>
 );
 

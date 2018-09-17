@@ -8,10 +8,9 @@ interface IXScaleProps {
   children: (scale: any) => JSX.Element;
 }
 
-const XScale: React.SFC<IXScaleProps & ISurfaceContext> = ({
-  width,
-  ...props
-}) => <Scale {...props} range={[0, width]} />;
+export const XScale: React.SFC<
+  IXScaleProps & Pick<ISurfaceContext, 'width'>
+> = ({ width, ...props }) => <Scale {...props} range={[0, width]} />;
 
 const XScaleWithContext: React.SFC<IXScaleProps> = props => (
   <SurfaceContext.Consumer>
