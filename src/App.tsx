@@ -6,57 +6,103 @@ import YAxis from 'src/components/YAxis';
 import XYScales from 'src/components/XYScales';
 import Animation from 'src/components/Animation';
 import Bars from 'src/components/Bars';
+import Dots from 'src/components/Dots';
 import { AutoSizer } from 'react-virtualized/dist/es/AutoSizer';
+import { Chance } from 'chance';
+import { times, zipWith } from 'lodash/fp';
+
+const COUNT = 10;
+const MIN_Y = 10;
+const MAX_Y = 200;
+
+const chance = new Chance();
+
+const colors = {
+  primary: '#5A5997',
+  secondary: '#9E80B7',
+  tertiary: '#F2BEFC'
+};
+const generateValues = (count: number): Array<[number, number]> =>
+  times(() => chance.integer({ min: MIN_Y, max: MAX_Y }), count).map((y, x) => [
+    x,
+    y
+  ]) as Array<[number, number]>;
 
 class App extends React.Component {
+  public state = {
+    seriesA: generateValues(COUNT),
+    seriesB: generateValues(COUNT)
+  };
   public render() {
     return (
       <div>
-        <AutoSizer disableHeight={true}>
-          {({ width }) => (
-            <Animation values={[width]}>
-              {({ values }) => (
-                <Surface
-                  width={values[0]}
-                  height={400}
-                  padding={[10, 10, 20, 30]}
-                >
-                  <XYScales
-                    yDomain={[10, 130]}
-                    xDomain={['apples', 'oranges', 'pears']}
-                    xType="band"
-                  >
-                    <XAxis />
-                    <Bars
-                      color="green"
-                      points={[['apples', 50], ['oranges', 20], ['pears', 90]]}
-                    />
-                  </XYScales>
-                  <XYScales yDomain={[10, 130]} xDomain={[1, 3]}>
-                    <XAxis />
-                    <YAxis />
-                    <Animation values={[10, 30, 130]}>
-                      {({ values: yValues }) => (
-                        <Line
-                          color="red"
-                          points={[
-                            [1, yValues[0]],
-                            [2, yValues[1]],
-                            [3, yValues[2]]
-                          ]}
-                        />
-                      )}
-                    </Animation>
-                    <Line color="blue" points={[[1, 50], [2, 20], [3, 90]]} />
-                  </XYScales>
-                </Surface>
-              )}
-            </Animation>
-          )}
+        <button style={{ margin: '10px auto' }} onClick={this.updateValues}>
+          Update values
+        </button>
+        <AutoSizer pureBreaker={chance.integer()} disableHeight={true}>
+          {this.renderChart}
         </AutoSizer>
       </div>
     );
   }
+
+  private renderChart = ({ width }: { width: number }) => {
+    const { seriesA, seriesB } = this.state;
+    return (
+      <Surface width={width} height={400} padding={[10, 10, 20, 30]}>
+        <XYScales
+          yDomain={[MIN_Y, MAX_Y]}
+          xDomain={['apples', 'oranges', 'pears']}
+          xType="band"
+        >
+          <XAxis />
+          <Bars
+            color={colors.tertiary}
+            points={[['apples', 50], ['oranges', 20], ['pears', 90]]}
+          />
+        </XYScales>
+        <XYScales yDomain={[MIN_Y, MAX_Y]} xDomain={[0, COUNT]}>
+          <XAxis />
+          <YAxis />
+          <Animation values={seriesA.map(([_, y]) => y)}>
+            {({ values: yValues }) => (
+              <React.Fragment>
+                <Line
+                  color={colors.primary}
+                  points={
+                    zipWith(
+                      ([x, y], newY) => [x, newY],
+                      seriesA,
+                      yValues
+                    ) as Array<[number, number]>
+                  }
+                />
+                <Dots
+                  color={colors.primary}
+                  points={
+                    zipWith(
+                      ([x, y], newY) => [x, newY],
+                      seriesA,
+                      yValues
+                    ) as Array<[number, number]>
+                  }
+                />
+              </React.Fragment>
+            )}
+          </Animation>
+          <Line color={colors.secondary} points={seriesB} />
+          <Dots color={colors.secondary} points={seriesB} />
+        </XYScales>
+      </Surface>
+    );
+  };
+
+  private updateValues = () => {
+    this.setState({
+      seriesA: generateValues(COUNT),
+      seriesB: generateValues(COUNT)
+    });
+  };
 }
 
 export default App;

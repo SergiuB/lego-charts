@@ -4,46 +4,45 @@ import { XYScalesContext, IXYScalesContext } from 'src/components/XYScales';
 
 type Point = [any, number];
 
-interface IBarsProps {
+interface IDotsProps {
   points: Point[];
   color: string;
+  radius?: number;
 }
 
-const Bars: React.SFC<IBarsProps & ISurfaceContext & IXYScalesContext> = ({
+const Dots: React.SFC<IDotsProps & ISurfaceContext & IXYScalesContext> = ({
   color,
+  radius = 5,
   xScale,
   yScale,
   height,
   points
 }) => {
-  const xScaleWPadding = xScale.padding(0.5);
-
-  const bars = points.map(([x, y]) => {
+  const dots = points.map(([x, y]) => {
     return (
-      <rect
+      <circle
         key={x}
-        x={xScaleWPadding(x) || 0}
-        y={yScale(y) || 0}
-        height={height - (yScale(y) || 0)}
-        width={xScaleWPadding.bandwidth() || 0}
+        r={radius}
+        cx={xScale(x) || 0}
+        cy={yScale(y) || 0}
         fill={color}
       />
     );
   });
 
-  return <g>{bars}</g>;
+  return <g>{dots}</g>;
 };
 
-const BarsWithContext: React.SFC<IBarsProps> = props => (
+const DotsWithContext: React.SFC<IDotsProps> = props => (
   <SurfaceContext.Consumer>
     {surfaceContext => (
       <XYScalesContext.Consumer>
         {xyScalesContext => (
-          <Bars {...props} {...surfaceContext} {...xyScalesContext} />
+          <Dots {...props} {...surfaceContext} {...xyScalesContext} />
         )}
       </XYScalesContext.Consumer>
     )}
   </SurfaceContext.Consumer>
 );
 
-export default BarsWithContext;
+export default DotsWithContext;
