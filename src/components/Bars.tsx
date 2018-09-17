@@ -17,18 +17,16 @@ const Bars: React.SFC<IBarsProps & ISurfaceContext & IXYScalesContext> = ({
   height,
   points
 }) => {
-  console.log(xScale, yScale);
   const xScaleWPadding = xScale.padding(0.5);
 
   const bars = points.map(([x, y]) => {
-    console.log(x, xScaleWPadding(x));
     return (
       <rect
         key={x}
-        x={xScaleWPadding(x)}
-        y={yScale(y)}
-        height={height - yScale(y)}
-        width={xScaleWPadding.bandwidth()}
+        x={xScaleWPadding(x) || 0}
+        y={yScale(y) || 0}
+        height={height - (yScale(y) || 0)}
+        width={xScaleWPadding.bandwidth() || 0}
         fill={color}
       />
     );
