@@ -1,32 +1,24 @@
 import * as React from 'react';
 import { axisLeft } from 'd3-axis';
-import { ScaleContext, IScaleContext } from 'src/components/ScaleProvider';
 import { SurfaceContext, ISurfaceContext } from 'src/components/Surface';
 import Axis from './Axis';
 
 interface IYAxisProps {
-  ticks: number;
+  yScale: any;
 }
 
-const YAxis: React.SFC<IYAxisProps & ISurfaceContext & IScaleContext> = ({
+const YAxis: React.SFC<IYAxisProps & ISurfaceContext> = ({
   width,
   height,
-  yScale,
-  ticks
+  yScale
 }) => {
-  const yAxis = axisLeft(yScale).ticks(ticks);
+  const yAxis = axisLeft(yScale).ticks(Math.floor(width / 100));
   return <Axis height={height} axis={yAxis} axisType="y" />;
 };
 
 const YAxisWithContext: React.SFC<IYAxisProps> = props => (
   <SurfaceContext.Consumer>
-    {surfaceContext => (
-      <ScaleContext.Consumer>
-        {scaleContext => (
-          <YAxis {...props} {...scaleContext} {...surfaceContext} />
-        )}
-      </ScaleContext.Consumer>
-    )}
+    {surfaceContext => <YAxis {...props} {...surfaceContext} />}
   </SurfaceContext.Consumer>
 );
 
