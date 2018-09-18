@@ -2,12 +2,11 @@ import * as React from 'react';
 import { AutoSizer } from 'react-virtualized/dist/es/AutoSizer';
 import { Chance } from 'chance';
 import { times } from 'lodash/fp';
-import { Surface } from 'src/components/Surface';
-import { XScale } from 'src/components/XScale';
-import { YScale } from 'src/components/YScale';
-import { Line } from 'src/components/Line';
-import { XAxis } from 'src/components/XAxis';
-import { YAxis } from 'src/components/YAxis';
+import Surface from 'src/components/Surface';
+import XYScales from 'src/components/XYScales';
+import Line from 'src/components/Line';
+import XAxis from 'src/components/XAxis';
+import YAxis from 'src/components/YAxis';
 
 const COUNT = 10;
 const MIN_Y = 10;
@@ -58,34 +57,11 @@ class App extends React.Component {
     const { seriesA } = this.state;
     return (
       <Surface width={width} height={400} padding={[30, 30, 30, 30]}>
-        {({ width: paddedWidth, height: paddedHeight }) => (
-          <XScale domain={[0, COUNT]} width={paddedWidth}>
-            {xScale => (
-              <YScale domain={[MIN_Y, MAX_Y]} height={paddedHeight}>
-                {yScale => (
-                  <React.Fragment>
-                    <XAxis
-                      width={paddedWidth}
-                      height={paddedHeight}
-                      xScale={xScale}
-                    />
-                    <YAxis
-                      width={paddedWidth}
-                      height={paddedHeight}
-                      yScale={yScale}
-                    />
-                    <Line
-                      points={seriesA}
-                      color={colors.primary}
-                      xScale={xScale}
-                      yScale={yScale}
-                    />
-                  </React.Fragment>
-                )}
-              </YScale>
-            )}
-          </XScale>
-        )}
+        <XYScales xDomain={[0, COUNT]} yDomain={[MIN_Y, MAX_Y]}>
+          <XAxis />
+          <YAxis />
+          <Line points={seriesA} color={colors.primary} />
+        </XYScales>
       </Surface>
     );
   };
