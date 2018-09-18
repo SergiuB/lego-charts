@@ -43,7 +43,7 @@ class App extends React.Component {
           Update values
         </button>
 
-        {/* <div style={{ width: '51%' }}> */}
+        {/* <div style={{ width: '50%', border: '1px solid gray' }}> */}
         <AutoSizer pureBreaker={chance.integer()} disableHeight={true}>
           {({ width }) => (
             <h1 style={{ width, textAlign: 'center' }}>
