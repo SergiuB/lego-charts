@@ -8,6 +8,7 @@ import Line from 'src/components/Line';
 import XAxis from 'src/components/XAxis';
 import YAxis from 'src/components/YAxis';
 import Dots from 'src/components/Dots';
+import Animation from 'src/components/Animation';
 
 const COUNT = 10;
 const MIN_Y = 10;
@@ -56,15 +57,25 @@ class App extends React.Component {
 
   private renderChart = ({ width }: { width: number }) => {
     const { seriesA } = this.state;
+    const opacity = 1;
     return (
-      <Surface width={width} height={400} padding={[30, 30, 30, 30]}>
-        <XYScales xDomain={[0, COUNT]} yDomain={[MIN_Y, MAX_Y]}>
-          <XAxis />
-          <YAxis />
-          <Line points={seriesA} color={colors.primary} />
-          <Dots points={seriesA} color={colors.primary} />
-        </XYScales>
-      </Surface>
+      <Animation values={[width, opacity]}>
+        {({ values }) => (
+          <Surface
+            width={values[0]}
+            height={400}
+            padding={[30, 30, 30, 30]}
+            opacity={values[1]}
+          >
+            <XYScales xDomain={[0, COUNT]} yDomain={[MIN_Y, MAX_Y]}>
+              <XAxis />
+              <YAxis />
+              <Line points={seriesA} color={colors.primary} />
+              <Dots points={seriesA} color={colors.primary} />
+            </XYScales>
+          </Surface>
+        )}
+      </Animation>
     );
   };
 
