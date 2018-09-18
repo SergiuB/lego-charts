@@ -8,6 +8,7 @@ interface IDotsProps {
   points: Point[];
   color: string;
   radius?: number;
+  highlight?: Point;
 }
 
 const Dots: React.SFC<IDotsProps & ISurfaceContext & IXYScalesContext> = ({
@@ -16,13 +17,14 @@ const Dots: React.SFC<IDotsProps & ISurfaceContext & IXYScalesContext> = ({
   xScale,
   yScale,
   height,
-  points
+  points,
+  highlight
 }) => {
   const dots = points.map(([x, y]) => {
     return (
       <circle
         key={x}
-        r={radius}
+        r={highlight && x === highlight[0] ? radius * 2 : radius}
         cx={xScale(x) || 0}
         cy={yScale(y) || 0}
         fill={color}

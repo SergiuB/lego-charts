@@ -10,6 +10,7 @@ import Dots from 'src/components/Dots';
 import { AutoSizer } from 'react-virtualized/dist/es/AutoSizer';
 import { Chance } from 'chance';
 import { times, zipWith } from 'lodash/fp';
+import PointAtCoordinates from 'src/components/PointAtCoordinates';
 
 const COUNT = 10;
 const MIN_Y = 10;
@@ -90,8 +91,18 @@ class App extends React.Component {
               </React.Fragment>
             )}
           </Animation>
-          <Line color={colors.secondary} points={seriesB} />
-          <Dots color={colors.secondary} points={seriesB} />
+          <PointAtCoordinates points={seriesB}>
+            {point => (
+              <React.Fragment>
+                <Line color={colors.secondary} points={seriesB} />
+                <Dots
+                  color={colors.secondary}
+                  points={seriesB}
+                  highlight={point}
+                />
+              </React.Fragment>
+            )}
+          </PointAtCoordinates>
         </XYScales>
       </Surface>
     );
