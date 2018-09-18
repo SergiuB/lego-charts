@@ -24,7 +24,9 @@ export const XYScalesContext = React.createContext<IXYScalesContext>({
   yScale: null
 });
 
-const XYScales: React.SFC<IXYScalesProps & ISurfaceContext & IRenderProps> = ({
+export const XYScales: React.SFC<
+  IXYScalesProps & Pick<ISurfaceContext, 'width' | 'height'> & IRenderProps
+> = ({
   xDomain,
   yDomain,
   xType = 'linear',
