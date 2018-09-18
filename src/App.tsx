@@ -11,6 +11,8 @@ import Dots from 'src/components/Dots';
 import Animation from 'src/components/Animation';
 import { Point } from 'src/types';
 import { zipWith } from 'lodash/fp';
+import PointAtCoordinates from 'src/components/PointAtCoordinates';
+import Dot from 'src/components/Dot';
 
 const COUNT = 10;
 const MIN_Y = 10;
@@ -81,6 +83,13 @@ class App extends React.Component {
                 <React.Fragment>
                   <Line points={animatedSeriesA} color={colors.primary} />
                   <Dots points={animatedSeriesA} color={colors.primary} />
+                  <PointAtCoordinates points={animatedSeriesA}>
+                    {point =>
+                      point ? (
+                        <Dot point={point} color={colors.primary} radius={10} />
+                      ) : null
+                    }
+                  </PointAtCoordinates>
                 </React.Fragment>
               );
             }}

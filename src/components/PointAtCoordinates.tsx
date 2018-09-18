@@ -9,7 +9,7 @@ interface IPointAtCoordinatesProps {
 }
 
 interface IRenderProps {
-  children: (point?: Point) => JSX.Element;
+  children: (point?: Point) => JSX.Element | null;
 }
 
 const bis = bisector(d => d[0]).left;
