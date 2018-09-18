@@ -86,7 +86,15 @@ class App extends React.Component {
                   <PointAtCoordinates points={animatedSeriesA}>
                     {point =>
                       point ? (
-                        <Dot point={point} color={colors.primary} radius={10} />
+                        <Animation values={point}>
+                          {({ values: animatedPoint }) => (
+                            <Dot
+                              point={animatedPoint as Point}
+                              color={colors.primary}
+                              radius={10}
+                            />
+                          )}
+                        </Animation>
                       ) : null
                     }
                   </PointAtCoordinates>
