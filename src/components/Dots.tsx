@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { ISurfaceContext, SurfaceContext } from 'src/components/Surface';
 import { XYScalesContext, IXYScalesContext } from 'src/components/XYScales';
+import { Dot } from 'src/components/Dot';
 
 type Point = [any, number];
 
@@ -8,26 +8,24 @@ interface IDotsProps {
   points: Point[];
   color: string;
   radius?: number;
-  highlight?: Point;
 }
 
-const Dots: React.SFC<IDotsProps & ISurfaceContext & IXYScalesContext> = ({
+export const Dots: React.SFC<IDotsProps & IXYScalesContext> = ({
   color,
   radius = 5,
   xScale,
   yScale,
-  height,
-  points,
-  highlight
+  points
 }) => {
-  const dots = points.map(([x, y]) => {
+  const dots = points.map(point => {
     return (
-      <circle
-        key={x}
-        r={highlight && x === highlight[0] ? radius * 2 : radius}
-        cx={xScale(x) || 0}
-        cy={yScale(y) || 0}
-        fill={color}
+      <Dot
+        key={point[0]}
+        radius={radius}
+        color={color}
+        xScale={xScale}
+        yScale={yScale}
+        point={point}
       />
     );
   });
@@ -36,15 +34,9 @@ const Dots: React.SFC<IDotsProps & ISurfaceContext & IXYScalesContext> = ({
 };
 
 const DotsWithContext: React.SFC<IDotsProps> = props => (
-  <SurfaceContext.Consumer>
-    {surfaceContext => (
-      <XYScalesContext.Consumer>
-        {xyScalesContext => (
-          <Dots {...props} {...surfaceContext} {...xyScalesContext} />
-        )}
-      </XYScalesContext.Consumer>
-    )}
-  </SurfaceContext.Consumer>
+  <XYScalesContext.Consumer>
+    {xyScalesContext => <Dots {...props} {...xyScalesContext} />}
+  </XYScalesContext.Consumer>
 );
 
 export default DotsWithContext;
