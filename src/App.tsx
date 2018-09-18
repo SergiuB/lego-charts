@@ -7,6 +7,7 @@ import XYScales from 'src/components/XYScales';
 import Line from 'src/components/Line';
 import XAxis from 'src/components/XAxis';
 import YAxis from 'src/components/YAxis';
+import Dots from 'src/components/Dots';
 
 const COUNT = 10;
 const MIN_Y = 10;
@@ -61,6 +62,7 @@ class App extends React.Component {
           <XAxis />
           <YAxis />
           <Line points={seriesA} color={colors.primary} />
+          <Dots points={seriesA} color={colors.primary} />
         </XYScales>
       </Surface>
     );
