@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { XYScalesContext, IXYScalesContext } from 'src/components/XYScales';
 import { Dot } from 'src/components/Dot';
-
-type Point = [any, number];
+import { Point } from 'src/types';
 
 interface IDotsProps {
   points: Point[];

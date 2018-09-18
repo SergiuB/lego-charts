@@ -2,8 +2,7 @@ import * as React from 'react';
 import { SurfaceContext, ISurfaceContext } from 'src/components/Surface';
 import { IXYScalesContext, XYScalesContext } from 'src/components/XYScales';
 import { bisector } from 'd3-array';
-
-type Point = [number, number];
+import { Point } from 'src/types';
 
 interface IPointAtCoordinatesProps {
   points: Point[];

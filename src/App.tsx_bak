@@ -26,7 +26,6 @@ const colors = {
   secondary: '#9E80B7',
   tertiary: '#F2BEFC'
 };
-
 const generateValues = (count: number): Array<[number, number]> =>
   times(() => chance.integer({ min: MIN_Y, max: MAX_Y }), count).map((y, x) => [
     x,
@@ -38,19 +37,10 @@ class App extends React.Component {
     seriesA: generateValues(COUNT),
     seriesB: generateValues(COUNT)
   };
-
   public render() {
     return (
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column'
-        }}
-      >
-        <button
-          style={{ margin: '10px auto', width: 200, height: 50, fontSize: 24 }}
-          onClick={this.updateValues}
-        >
+      <div>
+        <button style={{ margin: '10px auto' }} onClick={this.updateValues}>
           Update values
         </button>
         <AutoSizer pureBreaker={chance.integer()} disableHeight={true}>

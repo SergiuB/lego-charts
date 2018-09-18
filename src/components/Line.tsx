@@ -2,9 +2,7 @@ import * as React from 'react';
 import { curveCardinal } from 'd3-shape';
 import { line } from 'd3-shape';
 import { XYScalesContext, IXYScalesContext } from 'src/components/XYScales';
-// import withContext from './withContext';
-
-type Point = [number, number];
+import { Point } from 'src/types';
 
 interface ILineProps {
   points: Point[];

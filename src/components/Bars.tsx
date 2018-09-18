@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { ISurfaceContext, SurfaceContext } from 'src/components/Surface';
 import { XYScalesContext, IXYScalesContext } from 'src/components/XYScales';
-
-type Point = [any, number];
+import { Point } from 'src/types';
 
 interface IBarsProps {
   points: Point[];
