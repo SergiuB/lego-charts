@@ -9,6 +9,8 @@ import XAxis from 'src/components/XAxis';
 import YAxis from 'src/components/YAxis';
 import Dots from 'src/components/Dots';
 import Animation from 'src/components/Animation';
+import { Point } from 'src/types';
+import { zipWith } from 'lodash/fp';
 
 const COUNT = 10;
 const MIN_Y = 10;
@@ -22,11 +24,11 @@ const colors = {
   tertiary: '#F2BEFC'
 };
 
-const generateValues = (count: number): Array<[number, number]> =>
+const generateValues = (count: number): Point[] =>
   times(() => chance.integer({ min: MIN_Y, max: MAX_Y }), count).map((y, x) => [
     x,
     y
-  ]) as Array<[number, number]>;
+  ]) as Point[];
 
 class App extends React.Component {
   public state = {
@@ -59,23 +61,32 @@ class App extends React.Component {
     const { seriesA } = this.state;
     const opacity = 1;
     return (
-      <Animation values={[width, opacity]}>
-        {({ values }) => (
-          <Surface
-            width={values[0]}
-            height={400}
-            padding={[30, 30, 30, 30]}
-            opacity={values[1]}
-          >
-            <XYScales xDomain={[0, COUNT]} yDomain={[MIN_Y, MAX_Y]}>
-              <XAxis />
-              <YAxis />
-              <Line points={seriesA} color={colors.primary} />
-              <Dots points={seriesA} color={colors.primary} />
-            </XYScales>
-          </Surface>
-        )}
-      </Animation>
+      <Surface
+        width={width}
+        height={400}
+        padding={[30, 30, 30, 30]}
+        opacity={opacity}
+      >
+        <XYScales xDomain={[0, COUNT]} yDomain={[MIN_Y, MAX_Y]}>
+          <XAxis />
+          <YAxis />
+          <Animation values={seriesA.map(([_, y]) => y)}>
+            {({ values }) => {
+              const animatedSeriesA = zipWith(
+                ([x, y], newY) => [x, newY],
+                seriesA,
+                values
+              ) as Point[];
+              return (
+                <React.Fragment>
+                  <Line points={animatedSeriesA} color={colors.primary} />
+                  <Dots points={animatedSeriesA} color={colors.primary} />
+                </React.Fragment>
+              );
+            }}
+          </Animation>
+        </XYScales>
+      </Surface>
     );
   };
 

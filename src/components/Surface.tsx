@@ -72,13 +72,6 @@ export class Surface extends React.Component<ISurfaceProps & IRenderProps> {
     const mouseX = event.clientX - left - pl;
     const mouseY = event.clientY - top - pt;
 
-    console.log(
-      event.currentTarget.getBoundingClientRect(),
-      event.clientY,
-      top,
-      pt
-    );
-
     if (
       mouseX < 0 ||
       mouseX >= paddedWidth ||
