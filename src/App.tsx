@@ -63,47 +63,51 @@ class App extends React.Component {
     const { seriesA } = this.state;
     const opacity = 1;
     return (
-      <Surface
-        width={width}
-        height={400}
-        padding={[30, 30, 30, 30]}
-        opacity={opacity}
-      >
-        <XYScales xDomain={[0, COUNT]} yDomain={[MIN_Y, MAX_Y]}>
-          <XAxis />
-          <YAxis />
-          <Animation values={seriesA.map(([_, y]) => y)}>
-            {({ values }) => {
-              const animatedSeriesA = zipWith(
-                ([x, y], newY) => [x, newY],
-                seriesA,
-                values
-              ) as Point[];
-              return (
-                <React.Fragment>
-                  <Line points={animatedSeriesA} color={colors.primary} />
-                  <Dots points={animatedSeriesA} color={colors.primary} />
-                  <PointAtCoordinates points={animatedSeriesA}>
-                    {point =>
-                      point ? (
-                        <Animation values={point}>
-                          {({ values: animatedPoint }) => (
-                            <Dot
-                              point={animatedPoint as Point}
-                              color={colors.primary}
-                              radius={10}
-                            />
-                          )}
-                        </Animation>
-                      ) : null
-                    }
-                  </PointAtCoordinates>
-                </React.Fragment>
-              );
-            }}
-          </Animation>
-        </XYScales>
-      </Surface>
+      <Animation values={[width, opacity]}>
+        {({ values }) => (
+          <Surface
+            width={values[0]}
+            height={400}
+            padding={[30, 30, 30, 30]}
+            opacity={values[1]}
+          >
+            <XYScales xDomain={[0, COUNT]} yDomain={[MIN_Y, MAX_Y]}>
+              <XAxis />
+              <YAxis />
+              <Animation values={seriesA.map(([_, y]) => y)}>
+                {({ values: newYs }) => {
+                  const animatedSeriesA = zipWith(
+                    ([x, y], newY) => [x, newY],
+                    seriesA,
+                    newYs
+                  ) as Point[];
+                  return (
+                    <React.Fragment>
+                      <Line points={animatedSeriesA} color={colors.primary} />
+                      <Dots points={animatedSeriesA} color={colors.primary} />
+                      <PointAtCoordinates points={animatedSeriesA}>
+                        {point =>
+                          point ? (
+                            <Animation values={point}>
+                              {({ values: animatedPoint }) => (
+                                <Dot
+                                  point={animatedPoint as Point}
+                                  color={colors.primary}
+                                  radius={10}
+                                />
+                              )}
+                            </Animation>
+                          ) : null
+                        }
+                      </PointAtCoordinates>
+                    </React.Fragment>
+                  );
+                }}
+              </Animation>
+            </XYScales>
+          </Surface>
+        )}
+      </Animation>
     );
   };
 
