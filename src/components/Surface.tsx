@@ -15,7 +15,7 @@ interface IRenderProps {
 }
 
 interface ISurfaceProps extends IDimensions {
-  padding: [number, number, number, number];
+  padding?: [number, number, number, number];
   opacity?: number;
   onMouseMove?: React.MouseEventHandler;
 }
@@ -39,7 +39,7 @@ export class Surface extends React.Component<ISurfaceProps & IRenderProps> {
     const {
       width,
       height,
-      padding,
+      padding = [0, 0, 0, 0],
       opacity = 1,
       children: renderFn
     } = this.props;
@@ -64,7 +64,7 @@ export class Surface extends React.Component<ISurfaceProps & IRenderProps> {
 
   private handleMouseMove = (event: React.MouseEvent<Element>) => {
     const { left, top } = event.currentTarget.getBoundingClientRect();
-    const { width, height, padding } = this.props;
+    const { width, height, padding = [0, 0, 0, 0] } = this.props;
     const [pt, pr, pb, pl] = padding;
     const paddedWidth = width - (pl + pr);
     const paddedHeight = height - (pt + pb);

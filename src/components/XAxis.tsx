@@ -4,11 +4,9 @@ import { SurfaceContext, ISurfaceContext } from 'src/components/Surface';
 import Axis from './Axis';
 import { IXYScalesContext, XYScalesContext } from 'src/components/XYScales';
 
-const XAxis: React.SFC<ISurfaceContext & Pick<IXYScalesContext, 'xScale'>> = ({
-  width,
-  height,
-  xScale
-}) => {
+export const XAxis: React.SFC<
+  Pick<ISurfaceContext, 'height' | 'width'> & Pick<IXYScalesContext, 'xScale'>
+> = ({ width, height, xScale }) => {
   const xAxis = axisBottom(xScale).ticks(Math.floor(width / 100));
   return <Axis height={height} axis={xAxis} axisType="x" />;
 };

@@ -1,19 +1,12 @@
 import * as React from 'react';
-import Surface from 'src/components/Surface';
-import Line from 'src/components/Line';
-import XAxis from 'src/components/XAxis';
-import YAxis from 'src/components/YAxis';
-import XYScales from 'src/components/XYScales';
-import Animation from 'src/components/Animation';
-import Bars from 'src/components/Bars';
-import Dots from 'src/components/Dots';
 import { AutoSizer } from 'react-virtualized/dist/es/AutoSizer';
 import { Chance } from 'chance';
-import { times, zipWith } from 'lodash/fp';
-import PointAtCoordinates from 'src/components/PointAtCoordinates';
-import Dot from 'src/components/Dot';
-
-import { color } from 'd3-color';
+import { times } from 'lodash/fp';
+import { Surface } from 'src/components/Surface';
+import { XScale } from 'src/components/XScale';
+import { YScale } from 'src/components/YScale';
+import { Line } from 'src/components/Line';
+import { XAxis } from 'src/components/XAxis';
 
 const COUNT = 10;
 const MIN_Y = 10;
@@ -61,71 +54,32 @@ class App extends React.Component {
   }
 
   private renderChart = ({ width }: { width: number }) => {
-    const { seriesA, seriesB } = this.state;
+    const { seriesA } = this.state;
     return (
-      <Surface width={width} height={400} padding={[10, 10, 20, 30]}>
-        <XYScales
-          yDomain={[MIN_Y, MAX_Y]}
-          xDomain={['apples', 'oranges', 'pears']}
-          xType="band"
-        >
-          <XAxis />
-          <Bars
-            color={colors.tertiary}
-            points={[['apples', 50], ['oranges', 20], ['pears', 90]]}
-          />
-        </XYScales>
-        <XYScales yDomain={[MIN_Y, MAX_Y]} xDomain={[0, COUNT]}>
-          <XAxis />
-          <YAxis />
-          <Animation values={seriesA.map(([_, y]) => y)}>
-            {({ values: yValues }) => (
-              <React.Fragment>
-                <Line
-                  color={colors.primary}
-                  points={
-                    zipWith(
-                      ([x, y], newY) => [x, newY],
-                      seriesA,
-                      yValues
-                    ) as Array<[number, number]>
-                  }
-                />
-                <Dots
-                  color={colors.primary}
-                  points={
-                    zipWith(
-                      ([x, y], newY) => [x, newY],
-                      seriesA,
-                      yValues
-                    ) as Array<[number, number]>
-                  }
-                />
-              </React.Fragment>
-            )}
-          </Animation>
-          <PointAtCoordinates points={seriesB}>
-            {point => (
-              <React.Fragment>
-                <Line color={colors.secondary} points={seriesB} />
-                <Dots color={colors.secondary} points={seriesB} />
-                {point && (
-                  <Animation values={point}>
-                    {({ values: animatedPoint }) => (
-                      <Dot
-                        radius={10}
-                        color={color(colors.secondary)!
-                          .darker()
-                          .hex()}
-                        point={animatedPoint as [any, number]}
-                      />
-                    )}
-                  </Animation>
+      <Surface width={width} height={400} padding={[30, 30, 30, 30]}>
+        {({ width: paddedWidth, height: paddedHeight }) => (
+          <XScale domain={[0, COUNT]} width={paddedWidth}>
+            {xScale => (
+              <YScale domain={[MIN_Y, MAX_Y]} height={paddedHeight}>
+                {yScale => (
+                  <React.Fragment>
+                    <XAxis
+                      width={paddedWidth}
+                      height={paddedHeight}
+                      xScale={xScale}
+                    />
+                    <Line
+                      points={seriesA}
+                      color={colors.primary}
+                      xScale={xScale}
+                      yScale={yScale}
+                    />
+                  </React.Fragment>
                 )}
-              </React.Fragment>
+              </YScale>
             )}
-          </PointAtCoordinates>
-        </XYScales>
+          </XScale>
+        )}
       </Surface>
     );
   };
