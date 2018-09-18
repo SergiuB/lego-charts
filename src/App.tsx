@@ -7,6 +7,7 @@ import { XScale } from 'src/components/XScale';
 import { YScale } from 'src/components/YScale';
 import { Line } from 'src/components/Line';
 import { XAxis } from 'src/components/XAxis';
+import { YAxis } from 'src/components/YAxis';
 
 const COUNT = 10;
 const MIN_Y = 10;
@@ -67,6 +68,11 @@ class App extends React.Component {
                       width={paddedWidth}
                       height={paddedHeight}
                       xScale={xScale}
+                    />
+                    <YAxis
+                      width={paddedWidth}
+                      height={paddedHeight}
+                      yScale={yScale}
                     />
                     <Line
                       points={seriesA}
